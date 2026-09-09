@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administrador de portfolio | Skuvia Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <a href="../index.html" class="admin-brand" aria-label="Volver a la web de Skuvia Studio">
+      <img src="../assets/logo-480.webp" alt="Skuvia Studio" width="190" height="107">
+    </a>
+    <div class="admin-badge"><i></i> Administración local</div>
+  </header>
+
+  <main>
+    <section class="admin-hero">
+      <p class="eyebrow"><span></span> Portfolio manager</p>
+      <h1>Publica proyectos sin tocar el código.</h1>
+      <p>Selecciona la carpeta de la web, completa el proyecto en ambos idiomas y añade todas sus imágenes. El panel guardará el contenido directamente en los archivos de tu sitio.</p>
+    </section>
+
+    <section class="folder-panel" aria-labelledby="folder-title">
+      <div>
+        <span class="step">PASO 01</span>
+        <h2 id="folder-title">Conecta la carpeta de Skuvia</h2>
+        <p>Elige la carpeta <strong>skuvia-website</strong>, la misma que contiene <strong>index.html</strong> y <strong>portfolio-data.js</strong>.</p>
+      </div>
+      <div class="folder-action">
+        <button class="button button-dark" id="select-folder" type="button">Seleccionar carpeta <span>↗</span></button>
+        <p class="connection-status" id="connection-status" role="status">Aún no hay una carpeta conectada.</p>
+      </div>
+    </section>
+
+    <div class="admin-layout">
+      <section class="editor-panel" aria-labelledby="editor-title">
+        <div class="panel-heading">
+          <div><span class="step">PASO 02</span><h2 id="editor-title">Nuevo proyecto</h2></div>
+          <span class="language-pill">ES + EN</span>
+        </div>
+
+        <form id="project-form">
+          <fieldset>
+            <legend>Contenido en español</legend>
+            <label>Título del proyecto *
+              <input type="text" name="titleEs" required maxlength="100" placeholder="Ej. A+ Content para una marca de suplementos">
+            </label>
+            <div class="field-row">
+              <label>Categoría *
+                <input type="text" name="categoryEs" required maxlength="60" placeholder="Amazon A+ Content">
+              </label>
+              <label>Resumen para la tarjeta *
+                <input type="text" name="summaryEs" required maxlength="180" placeholder="Una frase breve sobre el proyecto">
+              </label>
+            </div>
+            <label>Descripción completa *
+              <textarea name="descriptionEs" required maxlength="1600" rows="6" placeholder="Explica el reto, el enfoque visual y lo que desarrollaste."></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Content in English</legend>
+            <label>Project title *
+              <input type="text" name="titleEn" required maxlength="100" placeholder="E.g. A+ Content for a supplement brand">
+            </label>
+            <div class="field-row">
+              <label>Category *
+                <input type="text" name="categoryEn" required maxlength="60" placeholder="Amazon A+ Content">
+              </label>
+              <label>Card summary *
+                <input type="text" name="summaryEn" required maxlength="180" placeholder="A short sentence about the project">
+              </label>
+            </div>
+            <label>Full description *
+              <textarea name="descriptionEn" required maxlength="1600" rows="6" placeholder="Describe the challenge, visual approach and what you created."></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Imágenes del proyecto</legend>
+            <div class="upload-grid">
+              <label class="file-field">
+                <span><strong>Portada principal *</strong><small>Será la imagen visible en la galería.</small></span>
+                <input type="file" name="cover" accept="image/jpeg,image/png,image/webp" required>
+              </label>
+              <label class="file-field">
+                <span><strong>Galería completa</strong><small>Hasta 20 imágenes en el orden seleccionado.</small></span>
+                <input type="file" name="gallery" accept="image/jpeg,image/png,image/webp" multiple>
+              </label>
+            </div>
+            <p class="file-note">Formatos permitidos: JPG, PNG o WebP. Máximo recomendado: 12 MB por imagen.</p>
+          </fieldset>
+
+          <button class="button button-lime button-publish" id="publish-project" type="submit" disabled>Publicar proyecto <span>↗</span></button>
+          <p class="form-status" id="admin-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="projects-panel" aria-labelledby="projects-title">
+        <div class="panel-heading">
+          <div><span class="step">PUBLICADOS</span><h2 id="projects-title">Proyectos</h2></div>
+          <strong class="project-count" id="project-count">0</strong>
+        </div>
+        <p class="projects-help">Puedes eliminar un proyecto después de conectar la carpeta. La acción también borra las imágenes subidas desde este panel.</p>
+        <div class="admin-project-list" id="admin-project-list"></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="admin-footer">
+    <p><strong>Importante:</strong> este panel modifica tu copia local. Cuando quieras actualizar la web publicada, vuelve a subir toda la carpeta <strong>skuvia-website</strong>.</p>
+    <a href="../portfolio.html">Ver el portfolio público <span>↗</span></a>
+  </footer>
+
+  <script src="../portfolio-data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
