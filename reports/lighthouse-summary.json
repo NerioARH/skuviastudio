@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-08",
+  "lighthouseVersion": "12.8.2",
+  "url": "http://127.0.0.1:4173/es/",
+  "mode": "mobile",
+  "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100
+  },
+  "metrics": {
+    "firstContentfulPaint": "1.1 s",
+    "largestContentfulPaint": "2.7 s",
+    "totalBlockingTime": "0 ms",
+    "cumulativeLayoutShift": 0
+  }
+}
