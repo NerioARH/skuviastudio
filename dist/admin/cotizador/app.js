@@ -13,14 +13,14 @@
     rates: {
       listing_essential: 100, // Visual Essential: 5 images
       listing_premium: 125,   // Visual Premium: 7 images
-      aplus_standard: 180,    // A+ Content standard (5 modules)
+      aplus_standard: 100,    // A+ Content standard (5 imágenes / módulos)
       aplus_premium: 240,     // A+ Content premium (6-7 modules)
       brand_story: 120,       // Amazon Brand Story
       storefront: 320,        // Amazon Storefront
       brand_experience: 400,  // Full Pack: Premium + A+ + Brand Story
       variant_addon: 35,      // Cost per additional child variant
       translation_rate: 25,   // Cost per language per ASIN
-      source_files_pct: 15,   // % of subtotal or flat fee for editable files
+      source_files_pct: 0,    // Archivos editables incluidos ($0)
       rush_delivery_pct: 25   // % surcharge for rush turnaround
     },
     volumeTiers: [
@@ -34,6 +34,9 @@
 
   // Load saved configuration or use default
   let config = JSON.parse(localStorage.getItem('skuvia_config')) || JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  if (config.rates.aplus_standard === 180) config.rates.aplus_standard = 100;
+  config.rates.source_files_pct = 0;
+  localStorage.setItem('skuvia_config', JSON.stringify(config));
 
   // Current Working State
   let state = {
@@ -403,12 +406,12 @@
                       <img src="../../assets/icon-content-256.webp" class="service-tile-icon" alt="A+">
                       <div>
                         <div class="service-tile-label">A+ Content Estándar</div>
-                        <div class="service-tile-desc">5 módulos de contenido</div>
+                        <div class="service-tile-desc">5 imágenes / módulos</div>
                       </div>
                     </div>
                   </div>
                   <div class="service-tile-footer">
-                    <span class="service-tile-desc">Optimizado para móvil</span>
+                    <span class="service-tile-desc">5 imágenes para móvil</span>
                     <span class="service-tile-price">$${config.rates.aplus_standard} <small>USD</small></span>
                   </div>
                 </div>
@@ -760,13 +763,14 @@
       text += ` → $${c.subtotal} USD\n`;
     });
 
-    if (calc.addonsTotal > 0) {
+    const hasAddons = calc.addonsTotal > 0 || state.addons.includeSourceFiles;
+    if (hasAddons) {
       text += `\n➕ *SERVICIOS GLOBALES / EXTRAS:*\n`;
       if (state.addons.multilingualCount > 0) {
         text += `• Adaptación a ${state.addons.multilingualCount} idiomas adicionales: +$${Math.round(calc.translationTotal)} USD\n`;
       }
       if (state.addons.includeSourceFiles) {
-        text += `• Archivos editables fuente (.AI/.PSD): +$${Math.round(calc.sourceFilesCost)} USD\n`;
+        text += `• Archivos editables fuente (.AI/.PSD): Incluidos (sin costo adicional)\n`;
       }
       if (state.addons.isRushDelivery) {
         text += `• Entrega Prioritaria / Express: +$${Math.round(calc.rushDeliveryCost)} USD\n`;
@@ -811,6 +815,9 @@
     text += `• Subtotal precio regular: $${Math.round(calc.itemsSubtotal)} USD\n`;
     if (calc.discountAmount > 0) {
       text += `• Descuento por volumen (${calc.volumeDiscountPct}%): -$${Math.round(calc.discountAmount)} USD\n`;
+    }
+    if (state.addons.includeSourceFiles) {
+      text += `• Archivos editables fuente (.AI/.PSD): Incluidos sin costo adicional\n`;
     }
     if (calc.addonsTotal > 0) {
       text += `• Extras / Servicios globales: +$${Math.round(calc.addonsTotal)} USD\n`;
@@ -913,7 +920,7 @@
                   const parts = [];
                   if (item.services.listing === 'essential') parts.push('Listing Essential (5 imgs: 1 main, 3 info, 1 life)');
                   if (item.services.listing === 'premium') parts.push('Listing Premium (7 imgs: 1 main, 4 info, 2 life + estrategia)');
-                  if (item.services.aplus === 'standard') parts.push('Amazon A+ Content Estándar (5 módulos)');
+                  if (item.services.aplus === 'standard') parts.push('Amazon A+ Content Estándar (5 imágenes / módulos)');
                   if (item.services.aplus === 'premium') parts.push('Amazon A+ Content Premium (6-7 módulos)');
                   if (item.services.brandStory) parts.push('Amazon Brand Story (Carrusel narrativo)');
                   if (item.services.storefront) parts.push('Amazon Storefront');
@@ -947,7 +954,7 @@
                   <td><strong>Archivos Fuente Editables</strong></td>
                   <td>Archivos maestros vectoriales y de capas organizadas (.AI / .PSD / .FIGMA)</td>
                   <td>—</td>
-                  <td>+$${Math.round(calc.sourceFilesCost)} USD</td>
+                  <td style="color: var(--lime-dark); font-weight: 700;">Incluido ($0 USD)</td>
                 </tr>
               ` : ''}
 
@@ -1027,7 +1034,7 @@
   function saveSettingsFromModal() {
     config.rates.listing_essential = Number(document.getElementById('cfg-listing-essential').value) || 100;
     config.rates.listing_premium = Number(document.getElementById('cfg-listing-premium').value) || 125;
-    config.rates.aplus_standard = Number(document.getElementById('cfg-aplus-std').value) || 180;
+    config.rates.aplus_standard = Number(document.getElementById('cfg-aplus-std').value) || 100;
     config.rates.aplus_premium = Number(document.getElementById('cfg-aplus-prem').value) || 240;
     config.rates.brand_story = Number(document.getElementById('cfg-brand-story').value) || 120;
     config.rates.storefront = Number(document.getElementById('cfg-storefront').value) || 320;
