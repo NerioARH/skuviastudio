@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Cotizador Privado | Skuvia Studio</title>
+  <link rel="icon" type="image/webp" href="../../assets/favicon-192.webp">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <!-- PIN Lock Screen (Private Security Access) -->
+  <div class="lock-screen-overlay" id="lock-screen-overlay">
+    <div class="lock-screen-card">
+      <img src="../../assets/logo-480.webp" alt="Skuvia Studio" class="lock-brand-logo">
+      <div class="eyebrow eyebrow-accent" style="justify-content: center; margin-bottom: 8px;">Acceso Privado</div>
+      <h1 class="lock-title">Cotizador Estratégico</h1>
+      <p class="lock-desc">Introduce tu PIN de acceso para desbloquear tus presupuestos y calculadora de pedidos grandes.</p>
+      <form id="lock-form">
+        <input type="password" id="lock-pin-input" class="form-control lock-pin-input" placeholder="••••" maxlength="12" autocomplete="current-password" required>
+        <div class="lock-error-msg" id="lock-error-msg"></div>
+        <label class="lock-remember-row">
+          <input type="checkbox" id="lock-remember-check" checked class="addon-checkbox">
+          <span>Recordar acceso en este teléfono</span>
+        </label>
+        <button type="submit" class="btn btn-primary btn-full" id="btn-lock-submit">
+          Desbloquear Cotizador <span>↗</span>
+        </button>
+      </form>
+      <p style="font-size: 11px; color: var(--muted); margin-top: 18px; margin-bottom: 0;">
+        PIN inicial predeterminado: <strong>2026</strong> (puedes cambiarlo en Ajustes)
+      </p>
+    </div>
+  </div>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <span><i></i> Skuvia Studio</span>
+    <span><i></i> Cotizador Privado & Pedidos Grandes</span>
+    <span><i></i> Escala por Volumen & Estrategia Visual</span>
+  </div>
+
+  <!-- Main Site Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <img src="../../assets/logo-480.webp" alt="Skuvia Studio" class="brand-logo">
+        <div class="brand-divider"></div>
+        <div class="app-title-tag">
+          <span class="title">Cotizador Estratégico</span>
+          <span class="subtitle">Amazon Visual Content Pricing Engine</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-small" id="btn-new-quote" title="Iniciar un presupuesto limpio">
+          <span class="btn-text-full">Nuevo Presupuesto</span>
+          <span class="btn-text-mobile">+ Nuevo</span>
+        </button>
+        <button class="btn btn-secondary btn-small" id="btn-open-history" title="Ver presupuestos anteriores">
+          <span>📂</span> <span class="btn-text-full">Guardados</span>
+        </button>
+        <button class="btn btn-secondary btn-small" id="btn-open-settings" title="Modificar tarifas base y PIN">
+          <span>⚙️</span> <span class="btn-text-full">Ajustes</span>
+        </button>
+        <button class="btn btn-secondary btn-small" id="btn-lock-app" title="Bloquear cotizador con PIN" style="color: var(--muted);">
+          <span>🔒</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- App Layout -->
+  <main class="app-layout">
+    <!-- Left Column: Settings, Products & Bulk Config -->
+    <div class="main-column">
+
+      <!-- Client & Project Information Card -->
+      <section class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <div>
+            <div class="eyebrow eyebrow-accent">Contexto del Proyecto</div>
+            <h2>Datos del Cliente & Parámetros</h2>
+          </div>
+          <span style="font-size: 12px; color: var(--muted); font-weight: 500;">
+            Validez y alcance por escrito
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="client-name">Nombre del Cliente / Contacto</label>
+              <input type="text" id="client-name" class="form-control" placeholder="Ej. Alex Turner">
+            </div>
+            <div class="form-group">
+              <label for="brand-name">Marca o Tienda</label>
+              <input type="text" id="brand-name" class="form-control" placeholder="Ej. Velour Essentials">
+            </div>
+            <div class="form-group">
+              <label for="marketplace-select">Marketplace Principal</label>
+              <select id="marketplace-select" class="form-control">
+                <option value="Amazon US (.com)">Amazon Estados Unidos (.com)</option>
+                <option value="Amazon España (.es)">Amazon España (.es)</option>
+                <option value="Amazon México (.com.mx)">Amazon México (.com.mx)</option>
+                <option value="Amazon UK (.co.uk)">Amazon Reino Unido (.co.uk)</option>
+                <option value="Amazon Alemania (.de)">Amazon Alemania (.de)</option>
+                <option value="Amazon Global / Multi-país">Amazon Multi-Marketplace</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="quote-date">Fecha de Cotización</label>
+              <input type="date" id="quote-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="quote-validity">Días de Validez de la Oferta</label>
+              <input type="number" id="quote-validity" class="form-control" value="15" min="1" max="90">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="client-notes">Objetivos / Notas Especiales (Opcional)</label>
+              <input type="text" id="client-notes" class="form-control" placeholder="Ej. Optimización de CTR, diferenciación frente a competidores directos...">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Batch Add & Presets Toolbar -->
+      <section class="toolbar-banner">
+        <div class="toolbar-info">
+          <div class="eyebrow eyebrow-light" style="margin-bottom: 4px;">Pedidos por Volumen</div>
+          <h3>Carga Rápida de Productos & Catálogos</h3>
+          <p>Añade múltiples ASINs en lote o aplica plantillas prediseñadas para agilizar la cotización.</p>
+        </div>
+        <div class="toolbar-buttons">
+          <button class="btn btn-primary" id="btn-add-asin">+ Añadir 1 ASIN</button>
+          <button class="btn btn-dark" id="btn-batch-add-3">+ 3 ASINs</button>
+          <button class="btn btn-dark" id="btn-batch-add-5">+ 5 ASINs</button>
+          <button class="btn btn-dark" id="btn-batch-add-10">+ 10 ASINs</button>
+        </div>
+      </section>
+
+      <!-- Quick Template Pills -->
+      <div class="quick-presets-scroll" style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+        <span style="font: 700 11px var(--display); text-transform: uppercase; color: var(--muted); letter-spacing: 0.08em; flex-shrink: 0;">
+          Plantillas Rápidas:
+        </span>
+        <button class="btn btn-secondary btn-small" id="preset-brand-exp">
+          ⭐ 3 ASINs Pack Brand Experience
+        </button>
+        <button class="btn btn-secondary btn-small" id="preset-5-premium">
+          🚀 5 Listings Visual Premium + Variantes
+        </button>
+        <button class="btn btn-secondary btn-small" id="preset-10-catalog">
+          📦 Catálogo Completo (10 ASINs Listing + A+)
+        </button>
+      </div>
+
+      <!-- Dynamic ASIN Items Container -->
+      <div class="items-list" id="asin-list-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <!-- Global Add-ons & Extra Services -->
+      <section class="card" style="margin-top: 24px;">
+        <div class="card-header">
+          <div>
+            <div class="eyebrow">Servicios Globales</div>
+            <h2>Complementos & Adaptaciones del Pedido</h2>
+          </div>
+          <span style="font-size: 12px; color: var(--muted);">Aplicables al pedido global</span>
+        </div>
+        <div class="card-body">
+          <div class="addons-grid">
+
+            <!-- Multilingual Adaptations -->
+            <div class="addon-card">
+              <div class="addon-details">
+                <div class="addon-title">
+                  <span>🌍 Adaptación a otros Marketplaces / Idiomas</span>
+                  <span style="color: var(--lime-dark); font-weight: 700;">+$25/idioma x ASIN</span>
+                </div>
+                <div class="addon-desc">
+                  Traducción y ajuste tipográfico para Europa/EEUU (ej. DE, FR, IT, ES, UK).
+                </div>
+                <div class="addon-custom-input">
+                  <label style="font-size: 11px; font-weight: 600;">Idiomas extra:</label>
+                  <select id="addon-languages" class="form-control" style="width: 140px; height: 34px; font-size: 12px;">
+                    <option value="0">Ninguno (1 solo idioma)</option>
+                    <option value="1">+1 Idioma adicional</option>
+                    <option value="2">+2 Idiomas adicionales</option>
+                    <option value="3">+3 Idiomas adicionales</option>
+                    <option value="4">+4 Idiomas adicionales</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Editable Source Files -->
+            <label class="addon-card" for="addon-source-files">
+              <input type="checkbox" id="addon-source-files" class="addon-checkbox">
+              <div class="addon-details">
+                <div class="addon-title">
+                  <span>📁 Archivos Fuente Editables</span>
+                  <span style="color: var(--lime-dark); font-weight: 700;">+15%</span>
+                </div>
+                <div class="addon-desc">
+                  Entrega de archivos maestros organizados en capas (.AI, .PSD o Figma) listos para futuras modificaciones internas.
+                </div>
+              </div>
+            </label>
+
+            <!-- Rush Turnaround -->
+            <label class="addon-card" for="addon-rush-delivery">
+              <input type="checkbox" id="addon-rush-delivery" class="addon-checkbox">
+              <div class="addon-details">
+                <div class="addon-title">
+                  <span>⚡ Entrega Urgente / Prioritaria (Rush)</span>
+                  <span style="color: var(--lime-dark); font-weight: 700;">+25%</span>
+                </div>
+                <div class="addon-desc">
+                  Prioridad en cola de diseño y reducción de ~40% en los tiempos de entrega pactados.
+                </div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Volume Discount Engine Banner -->
+      <section class="discount-tier-wrapper">
+        <div class="discount-header">
+          <div class="discount-title-group">
+            <div class="eyebrow eyebrow-light" style="margin-bottom: 2px;">Escalado por Volumen</div>
+            <h3>Descuento Automático para Pedidos Grandes</h3>
+            <p>Se aplica progresivamente sobre el subtotal según el número de ASINs presupuestados.</p>
+          </div>
+        </div>
+
+        <div class="discount-tiers-display" id="discount-tiers-display">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <div class="discount-manual-toggle">
+          <label>
+            <input type="checkbox" id="toggle-manual-discount" class="addon-checkbox">
+            <strong>Anular escala automática y aplicar descuento comercial manual</strong>
+          </label>
+          <div id="manual-discount-inputs" style="display: none; align-items: center; gap: 8px;">
+            <input type="number" id="manual-discount-val" class="form-control" style="width: 90px; height: 34px; font-size: 13px;" value="0" min="0">
+            <select id="manual-discount-type" class="form-control" style="width: 100px; height: 34px; font-size: 13px;">
+              <option value="percent">% Porcentaje</option>
+              <option value="fixed">$ Monto USD</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Sticky Summary & Export Engine -->
+    <aside class="sidebar-column">
+      <div class="sticky-summary">
+        <div class="summary-card" id="summary-card">
+          <div class="summary-header">
+            <div class="eyebrow">Resumen de Propuesta</div>
+            <h3>Presupuesto Final</h3>
+          </div>
+
+          <div class="summary-body">
+            <!-- Metrics Strip -->
+            <div class="metrics-strip">
+              <div class="metric-item">
+                <div class="metric-number" id="summary-asin-count">1</div>
+                <div class="metric-label">ASINs</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number" id="summary-variants-count">0</div>
+                <div class="metric-label">Variantes</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-number" id="summary-deliverables-count">12</div>
+                <div class="metric-label">Entregables</div>
+              </div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span>Subtotal precio base:</span>
+                <span id="summary-subtotal" style="font-weight: 600;">$0 USD</span>
+              </div>
+              <div class="breakdown-row discount" id="summary-discount-row" style="display: none;">
+                <span>Descuento por volumen <small id="summary-discount-pct"></small>:</span>
+                <span id="summary-discount-val">-$0 USD</span>
+              </div>
+              <div class="breakdown-row" id="summary-addons-row" style="display: none;">
+                <span>Servicios globales / Add-ons:</span>
+                <span id="summary-addons-val">+$0 USD</span>
+              </div>
+              <div class="breakdown-row divider"></div>
+              <div class="breakdown-total">
+                <span class="total-label">Inversión Total:</span>
+                <div class="total-amount" id="summary-grand-total">
+                  $0 <span>USD</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Savings Banner -->
+            <div class="savings-pill" id="summary-savings-pill" style="display: none;">
+              Ahorro por pedido grande
+            </div>
+
+            <!-- Delivery Time Info -->
+            <div style="background: var(--paper-2); padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                <strong style="color: var(--ink);">Plazo estimado:</strong>
+                <span id="summary-estimated-days" style="font-weight: 700; color: var(--lime-dark);">6 a 10 días</span>
+              </div>
+              <span style="color: var(--muted); font-size: 11px;">Proceso 100% por escrito · Revisiones incluidas</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="summary-actions">
+              <button class="btn btn-primary btn-full" id="btn-view-proposal">
+                📄 Ver Propuesta Formal / Guardar PDF
+              </button>
+              
+              <div class="action-share-group">
+                <button class="btn btn-secondary btn-small" id="btn-copy-whatsapp" title="Copiar mensaje directo para WhatsApp">
+                  💬 WhatsApp
+                </button>
+                <button class="btn btn-secondary btn-small" id="btn-copy-email" title="Copiar propuesta estructurada para Correo">
+                  ✉️ Email
+                </button>
+              </div>
+
+              <div class="action-share-group">
+                <button class="btn btn-secondary btn-small" id="btn-copy-fiverr" title="Copiar texto de Custom Offer para Fiverr">
+                  🏷️ Fiverr Offer
+                </button>
+                <button class="btn btn-outline-lime btn-small" id="btn-save-quote" title="Guardar presupuesto actual en tu historial">
+                  💾 Guardar
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Trust & Philosophy mini-strip -->
+        <div style="text-align: center; padding: 14px 18px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.6); border: 1px solid var(--line); font-size: 11px; color: var(--muted);">
+          <strong style="color: var(--ink); display: block; margin-bottom: 2px;">Metodología Skuvia Studio</strong>
+          Estrategia, diseño y copy visual conectados. Sin llamadas obligatorias.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Floating Mobile Sticky Bottom Bar (visible on phones/tablets) -->
+  <div class="mobile-bottom-bar" id="mobile-bottom-bar">
+    <div class="mobile-bar-summary" id="mobile-bar-trigger" title="Ver desglose completo">
+      <div class="mobile-bar-total" id="mobile-bar-total">$0 <small>USD</small></div>
+      <div class="mobile-bar-sub" id="mobile-bar-sub">1 ASIN · 0% OFF</div>
+    </div>
+    <div class="mobile-bar-actions">
+      <button class="btn btn-secondary btn-small" id="btn-mobile-whatsapp" title="Copiar WhatsApp">
+        💬 WhatsApp
+      </button>
+      <button class="btn btn-primary btn-small" id="btn-mobile-proposal" title="Ver Propuesta Formal / PDF">
+        📄 Propuesta
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Formal Proposal Sheet (Print & PDF) -->
+  <div class="modal-overlay" id="proposal-modal">
+    <div class="modal-dialog" style="max-width: 920px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="../../assets/isotipo-512.webp" alt="Skuvia" style="width: 24px; height: 24px;">
+          <h3>Vista Previa de Propuesta Formal</h3>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn btn-primary btn-small" id="btn-print-proposal">🖨️ Imprimir / Guardar en PDF</button>
+          <button class="btn btn-secondary btn-small" data-action="close-modal">Cerrar</button>
+        </div>
+      </div>
+      <div class="modal-body" id="proposal-sheet-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Settings / Price List Adjustments & PIN -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3>Ajustes de Tarifas & Seguridad (Skuvia Studio)</h3>
+        <button class="btn btn-icon btn-secondary" data-action="close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">
+          Personaliza los precios unitarios en USD y tu clave de seguridad privada.
+        </p>
+        
+        <div class="settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px;">
+          <div class="form-group">
+            <label>Visual Essential ($)</label>
+            <input type="number" id="cfg-listing-essential" class="form-control" value="100">
+          </div>
+          <div class="form-group">
+            <label>Visual Premium ($)</label>
+            <input type="number" id="cfg-listing-premium" class="form-control" value="125">
+          </div>
+          <div class="form-group">
+            <label>A+ Content Estándar ($)</label>
+            <input type="number" id="cfg-aplus-std" class="form-control" value="180">
+          </div>
+          <div class="form-group">
+            <label>A+ Content Premium ($)</label>
+            <input type="number" id="cfg-aplus-prem" class="form-control" value="240">
+          </div>
+          <div class="form-group">
+            <label>Amazon Brand Story ($)</label>
+            <input type="number" id="cfg-brand-story" class="form-control" value="120">
+          </div>
+          <div class="form-group">
+            <label>Amazon Storefront ($)</label>
+            <input type="number" id="cfg-storefront" class="form-control" value="320">
+          </div>
+          <div class="form-group">
+            <label>Pack Brand Experience ($)</label>
+            <input type="number" id="cfg-brand-exp" class="form-control" value="400">
+          </div>
+          <div class="form-group">
+            <label>Tarifa por Variante ($)</label>
+            <input type="number" id="cfg-variant-addon" class="form-control" value="35">
+          </div>
+        </div>
+
+        <div style="background: var(--paper-2); padding: 18px; border-radius: 12px; border: 1px solid var(--line);">
+          <div class="eyebrow eyebrow-accent" style="margin-bottom: 6px;">Seguridad de Acceso Privado</div>
+          <div class="form-group">
+            <label for="cfg-pin-code">PIN / Clave de Acceso al Cotizador</label>
+            <input type="text" id="cfg-pin-code" class="form-control" style="max-width: 200px; font-weight: 700; letter-spacing: 0.1em;" value="2026">
+            <span style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+              Este es el código que se solicita para entrar al cotizador desde el teléfono o navegador.
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-small" id="btn-reset-settings">Restablecer Valores</button>
+        <button class="btn btn-primary btn-small" id="btn-save-settings">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: History of Saved Quotes -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal-dialog" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Historial de Presupuestos Guardados</h3>
+        <button class="btn btn-icon btn-secondary" data-action="close-modal">✕</button>
+      </div>
+      <div class="modal-body" id="history-list-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-small" data-action="close-modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
