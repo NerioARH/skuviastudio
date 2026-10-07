@@ -743,7 +743,11 @@
     if (calc.totalVariants > 0) {
       text += `• Variantes de producto adicionales: *${calc.totalVariants}*\n`;
     }
-    text += `• Piezas visuales estimadas: *${calc.totalDeliverables} entregables*\n\n`;
+    text += `• Piezas visuales estimadas: *${calc.totalDeliverables} entregables*\n`;
+    if (state.addons.includeSourceFiles) {
+      text += `• Archivos maestros editables (.AI/.PSD): *Incluidos sin costo adicional ($0 USD)*\n`;
+    }
+    text += `\n`;
 
     text += `📋 *DESGLOSE POR PRODUCTO:*\n`;
     state.items.forEach((item, idx) => {
@@ -763,14 +767,10 @@
       text += ` → $${c.subtotal} USD\n`;
     });
 
-    const hasAddons = calc.addonsTotal > 0 || state.addons.includeSourceFiles;
-    if (hasAddons) {
-      text += `\n➕ *SERVICIOS GLOBALES / EXTRAS:*\n`;
+    if (calc.addonsTotal > 0) {
+      text += `\n➕ *SERVICIOS ADICIONALES (EXTRAS):*\n`;
       if (state.addons.multilingualCount > 0) {
         text += `• Adaptación a ${state.addons.multilingualCount} idiomas adicionales: +$${Math.round(calc.translationTotal)} USD\n`;
-      }
-      if (state.addons.includeSourceFiles) {
-        text += `• Archivos editables fuente (.AI/.PSD): Incluidos (sin costo adicional)\n`;
       }
       if (state.addons.isRushDelivery) {
         text += `• Entrega Prioritaria / Express: +$${Math.round(calc.rushDeliveryCost)} USD\n`;
@@ -809,18 +809,19 @@
     text += `• Marketplace: ${state.client.marketplace}\n`;
     text += `• Total productos a diseñar: ${calc.totalItems} ASINs\n`;
     if (calc.totalVariants > 0) text += `• Variantes de producto: ${calc.totalVariants} unidades\n`;
-    text += `• Entregables visuales aproximados: ${calc.totalDeliverables} piezas de diseño\n\n`;
+    text += `• Entregables visuales aproximados: ${calc.totalDeliverables} piezas de diseño\n`;
+    if (state.addons.includeSourceFiles) {
+      text += `• Archivos maestros editables (.AI/.PSD): Incluidos sin costo adicional ($0 USD)\n`;
+    }
+    text += `\n`;
 
     text += `DESGLOSE ECONÓMICO:\n`;
     text += `• Subtotal precio regular: $${Math.round(calc.itemsSubtotal)} USD\n`;
     if (calc.discountAmount > 0) {
       text += `• Descuento por volumen (${calc.volumeDiscountPct}%): -$${Math.round(calc.discountAmount)} USD\n`;
     }
-    if (state.addons.includeSourceFiles) {
-      text += `• Archivos editables fuente (.AI/.PSD): Incluidos sin costo adicional\n`;
-    }
     if (calc.addonsTotal > 0) {
-      text += `• Extras / Servicios globales: +$${Math.round(calc.addonsTotal)} USD\n`;
+      text += `• Servicios adicionales (Add-ons): +$${Math.round(calc.addonsTotal)} USD\n`;
     }
     text += `• INVERSIÓN TOTAL DEFINITIVA: $${Math.round(calc.grandTotal)} USD\n\n`;
 
@@ -950,11 +951,11 @@
 
               ${state.addons.includeSourceFiles ? `
                 <tr>
-                  <td>+</td>
-                  <td><strong>Archivos Fuente Editables</strong></td>
-                  <td>Archivos maestros vectoriales y de capas organizadas (.AI / .PSD / .FIGMA)</td>
+                  <td style="color: var(--lime-dark); font-weight: 700;">✓</td>
+                  <td><strong>Archivos Fuente Editables (.AI / .PSD / Figma)</strong></td>
+                  <td>Archivos maestros vectoriales y de capas organizadas incluidos sin costo adicional</td>
                   <td>—</td>
-                  <td style="color: var(--lime-dark); font-weight: 700;">Incluido ($0 USD)</td>
+                  <td style="color: var(--lime-dark); font-weight: 700;">INCLUIDO ($0 USD)</td>
                 </tr>
               ` : ''}
 
@@ -984,7 +985,7 @@
           ` : ''}
           ${calc.addonsTotal > 0 ? `
             <div style="display: flex; justify-content: space-between; font-size: 13px;">
-              <span>Servicios globales / Add-ons:</span>
+              <span>Servicios adicionales (Add-ons):</span>
               <strong>+$${Math.round(calc.addonsTotal)} USD</strong>
             </div>
           ` : ''}
